@@ -3,30 +3,43 @@ import instance from "@/utils/instance";
 
 const Index = () => {
   // 都道府県のデータ
-  const [data, setData] = useState([{ prefCode: 0, prefName: "" }]);
+  const [prefs, setPrefs] = useState([{ prefCode: 0, prefName: "" }]);
+  // 人口構成のデータ; 削除はしない
+  const [cmps, setCmps] = useState([]);
   // チェックされた都道府県のprefCode
   const [checked, setChecked] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const res = await instance.get("/api/v1/prefectures");
-      setData(res.data.result);
+      setPrefs(res.data.result);
     };
     fetchData();
   }, []);
 
   // チェックボックスの状態が変わったときのハンドラー
-  const handleChange = event => {
+  const handleChange = async event => {
     const value = event.target.value;
+    // データがなければ追加
+    if (!cmps.some(item => item.prefCode === value)) {
+      // APIから人口データを取得
+      const res = await instance.get("/api/v1/population/composition/perYear", {
+        params: {
+          prefCode: value,
+          cityCode: "-" // 市区町村はすべて
+        }
+      });
+      // responseから総人口のデータだけ格納
+      const data = res.data.result.data[0].data;
+      setCmps(cmps.concat({ prefCode: value, data }));
+    }
     // checkedになければ追加
     if (!checked.includes(value)) {
-      console.log("add");
       setChecked(checked.concat(value));
       return;
     }
     // checkedにあれば削除
     if (checked.includes(value)) {
-      console.log("remove");
       setChecked(checked.filter(item => item != value));
     }
   };
@@ -35,6 +48,9 @@ const Index = () => {
   useEffect(() => {
     console.log(checked);
   }, [checked]);
+  useEffect(() => {
+    console.log(cmps);
+  }, [cmps]);
 
   return (
     <>
@@ -43,7 +59,7 @@ const Index = () => {
       <section>
         <h2>都道府県</h2>
         <div className="checkbox-container">
-          {data.map(item => (
+          {prefs.map(item => (
             <div className="checkbox-wrapper" key={item.prefcode}>
               <input
                 type="checkbox"
@@ -66,7 +82,7 @@ const Index = () => {
         }
         .checkbox-wrapper {
           display: flex;
-          flex-basis: 10%;
+          flex-basis: 20%;
         }
       `}</style>
     </>
