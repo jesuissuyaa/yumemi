@@ -85,12 +85,12 @@ const Index = () => {
   };
 
   return (
-    <>
+    <main>
       <h1>都道府県別の人口推移グラフ</h1>
 
-      <section>
+      <section className="input-container">
         <h2>都道府県</h2>
-        <div className="CheckItem-container">
+        <div className="checkitem-container">
           {prefs.map(item => (
             <CheckItem
               key={item.prefCode}
@@ -167,12 +167,12 @@ const Index = () => {
           justify-content: center;
           margin-top: 5rem;
         }
-        .CheckItem-container {
+        .checkitem-container {
           display: flex;
           flex-flow: row wrap;
         }
       `}</style>
-    </>
+    </main>
   );
 };
 
