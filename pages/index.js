@@ -13,20 +13,30 @@ import {
 const Index = () => {
   // 都道府県のデータ
   const [prefs, setPrefs] = useState([{ prefCode: 0, prefName: "" }]);
-  // 人口構成のデータ; 削除はしない
-  const [cmps, setCmps] = useState([]);
-  // チェックされた都道府県のprefCode
-  const [checked, setChecked] = useState([]);
   // 年のデータ; 1960-2045まで5年刻み
   const years = [...Array(18)].map((_, i) => 1960 + i * 5);
   // 人口構成のデータ
   const [data, setData] = useState([]);
-  // データのdomain
-  // const [dataMax, setDataMax] = useState(0);
-  const dataMax = 15000000;
+  // グラフのticks
   const base = 1000000;
   const YTicks = [5 * base, 10 * base, 15 * base];
   const XTicks = [...Array(10)].map((_, i) => 1960 + i * 10);
+  // line styles
+  const colors = [
+    "#00876c",
+    "#439981",
+    "#6aaa96",
+    "#8cbcac",
+    "#aecdc2",
+    "#cfdfd9",
+    "#f1f1f1",
+    "#f1d4d4",
+    "#f0b8b8",
+    "#ec9c9d",
+    "#e67f83",
+    "#de6069",
+    "#d43d51"
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,54 +92,8 @@ const Index = () => {
         })
       );
     }
-
-    /*
-    // データがなければ追加
-    if (!cmps.some(item => item.prefCode === value)) {
-      // APIから人口データを取得
-      const res = await instance.get("/api/v1/population/composition/perYear", {
-        params: {
-          prefCode: value,
-          cityCode: "-" // 市区町村はすべて
-        }
-      });
-      // responseから総人口のデータだけ格納
-      const data = res.data.result.data[0].data;
-      setCmps(cmps.concat({ prefCode: value, data }));
-    }
-    // checkedになければ追加
-    if (!checked.includes(value)) {
-      setChecked(checked.concat(value));
-      return;
-    }
-    // checkedにあれば削除
-    if (checked.includes(value)) {
-      setChecked(checked.filter(item => item != value));
-    }
-    */
   };
 
-  // Y axisの最大値を更新
-  // useEffect(() => {
-  //   // 初期状態では更新しない
-  //   if (!data.length) return;
-  //   if (Object.keys(data[0]).length === 1) {
-  //     return;
-  //   }
-  //   // yearのpropertyを削除した配列
-  //   let ary = data;
-  //   // ary = ary.map(item => {
-  //   //   delete item.year;
-  //   //   return item;
-  //   // });
-  //   // objectのvalueだけ格納
-  //   ary = ary.map(item => Object.values(item));
-  //   // 配列のnestを解消
-  //   const values = ary.flat();
-  //   // 配列の最大値
-  //   const max = Math.max(...values);
-  //   setDataMax(max);
-  // }, [data]);
   return (
     <>
       <h1>都道府県別の人口推移グラフ</h1>
