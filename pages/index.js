@@ -21,7 +21,7 @@ const Index = () => {
   const base = 1000000;
   const YTicks = [5 * base, 10 * base, 15 * base];
   const XTicks = [...Array(10)].map((_, i) => 1960 + i * 10);
-  // line styles
+  // グラフのstyles
   const colors = [
     "#003f5c",
     "#ffa600",
@@ -33,6 +33,7 @@ const Index = () => {
     "#d45087"
   ];
 
+  // 都道府県のデータを取得→stateに格納
   useEffect(() => {
     const fetchData = async () => {
       const res = await instance.get("/api/v1/prefectures");
@@ -43,31 +44,24 @@ const Index = () => {
     setData(years.map(item => ({ year: item })));
   }, []);
 
-  // DEBUG
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   // チェックボックスの状態が変わったときのハンドラー
-  // 人口データの取得とチェックされた都道府県リストの更新をする
   const handleChange = async event => {
-    // const value = event.target.value;
-    const prefCode = parseInt(event.target.value, 10);
-    const prefName = prefs.find(item => item.prefCode === prefCode).prefName;
+    const prefCode = parseInt(event.target.value, 10); // 都道府県のコード
+    const prefName = prefs.find(item => item.prefCode === prefCode).prefName; // 都道府県の名前
     const keys = Object.keys(data[0]); // グラフ用データのキー
 
     // checked --> uncheckedの場合
     if (keys.includes(prefName)) {
       // stateを更新
       setData(
-        // TODO: もっと良い消し方があれば修正
         data.map(item => {
           delete item[prefName];
           return item;
         })
       );
     }
-    // checked --> uncheckedの場合
+
+    // unchecked --> checkedの場合
     if (!keys.includes(prefName)) {
       // APIから人口データを取得
       const res = await instance.get("/api/v1/population/composition/perYear", {
