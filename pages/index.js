@@ -23,19 +23,14 @@ const Index = () => {
   const XTicks = [...Array(10)].map((_, i) => 1960 + i * 10);
   // line styles
   const colors = [
-    "#00876c",
-    "#439981",
-    "#6aaa96",
-    "#8cbcac",
-    "#aecdc2",
-    "#cfdfd9",
-    "#f1f1f1",
-    "#f1d4d4",
-    "#f0b8b8",
-    "#ec9c9d",
-    "#e67f83",
-    "#de6069",
-    "#d43d51"
+    "#003f5c",
+    "#ffa600",
+    "#2f4b7c",
+    "#ff7c43",
+    "#665191",
+    "#f95d6a",
+    "#a05195",
+    "#d45087"
   ];
 
   useEffect(() => {
@@ -140,13 +135,17 @@ const Index = () => {
             <YAxis
               domain={[0, YTicks[YTicks.length - 1]]}
               ticks={YTicks}
+              tickFormatter={tick => tick.toLocaleString()}
               label={{
                 value: "人口総数 (人) ",
                 position: "insideTopLeft",
                 offset: -40
               }}
             />
-            {data.length && <Tooltip />}]
+            <Tooltip
+              labelFormatter={label => label + "年"}
+              formatter={value => value + "人"}
+            />
             <Legend
               verticalAlign="top"
               align="center"
@@ -161,12 +160,13 @@ const Index = () => {
             />
             {Object.keys(data[0])
               .filter(item => item !== "year")
-              .map(item => (
+              .map((item, i) => (
                 <Line
                   key={item}
                   type="monotone"
                   dataKey={item}
-                  stroke="#8884d8"
+                  stroke={colors[i % colors.length]}
+                  strokeWidth={2}
                 />
               ))}
           </LineChart>
