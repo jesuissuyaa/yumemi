@@ -59,3 +59,8 @@ http://localhost:3000 でアプリが起動します
 - [RESAS-API](https://opendata.resas-portal.go.jp/)
 - [Data Color Picker](https://learnui.design/tools/data-color-picker.html#palette) (グラフの色の生成)
 
+## 参考資料
+
+Atomic Design: Reactプロジェクトでcomponentを整理する考え方
+- https://dev.to/maciekchmura/how-i-structure-a-react-project-3c2i
+
