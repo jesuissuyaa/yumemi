@@ -22,8 +22,11 @@ const Index = () => {
   // 人口構成のデータ
   const [data, setData] = useState([]);
   // データのdomain
-  const [dataMin, setDataMin] = useState(0);
-  const [dataMax, setDataMax] = useState(0);
+  // const [dataMax, setDataMax] = useState(0);
+  const dataMax = 15000000;
+  const base = 1000000;
+  const YTicks = [5 * base, 10 * base, 15 * base];
+  const XTicks = [...Array(10)].map((_, i) => 1960 + i * 10);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,8 +49,6 @@ const Index = () => {
     // const value = event.target.value;
     const prefCode = parseInt(event.target.value, 10);
     const prefName = prefs.find(item => item.prefCode === prefCode).prefName;
-
-    console.log(prefName);
     const keys = Object.keys(data[0]); // グラフ用データのキー
 
     // checked --> uncheckedの場合
@@ -81,6 +82,7 @@ const Index = () => {
         })
       );
     }
+
     /*
     // データがなければ追加
     if (!cmps.some(item => item.prefCode === value)) {
@@ -107,14 +109,27 @@ const Index = () => {
     */
   };
 
-  // DEBUG
+  // Y axisの最大値を更新
   // useEffect(() => {
-  //   console.log(checked);
-  // }, [checked]);
-  // useEffect(() => {
-  //   console.log(cmps);
-  // }, [cmps]);
-
+  //   // 初期状態では更新しない
+  //   if (!data.length) return;
+  //   if (Object.keys(data[0]).length === 1) {
+  //     return;
+  //   }
+  //   // yearのpropertyを削除した配列
+  //   let ary = data;
+  //   // ary = ary.map(item => {
+  //   //   delete item.year;
+  //   //   return item;
+  //   // });
+  //   // objectのvalueだけ格納
+  //   ary = ary.map(item => Object.values(item));
+  //   // 配列のnestを解消
+  //   const values = ary.flat();
+  //   // 配列の最大値
+  //   const max = Math.max(...values);
+  //   setDataMax(max);
+  // }, [data]);
   return (
     <>
       <h1>都道府県別の人口推移グラフ</h1>
@@ -141,13 +156,45 @@ const Index = () => {
 
       <section className="chart-container">
         {data.length !== 0 && (
-          <LineChart width={500} height={300} data={data} margin={50}>
+          <LineChart
+            width={800}
+            height={600}
+            data={data}
+            margin={{ top: 50, left: 50, bottom: 50, right: 50 }}
+          >
             <CartesianGrid />
-            <XAxis dataKey="year" />
-            <YAxis
-            //  label="人口"
+            <XAxis
+              dataKey="year"
+              ticks={XTicks}
+              domain={[XTicks[0], XTicks[XTicks.length - 1]]}
+              label={{
+                value: "年度 (年) ",
+                position: "insideBottomRight",
+                offset: -20
+              }}
             />
-            {data.length && <Tooltip />}
+            <YAxis
+              domain={[0, YTicks[YTicks.length - 1]]}
+              ticks={YTicks}
+              label={{
+                value: "人口総数 (人) ",
+                position: "insideTopLeft",
+                offset: -40
+              }}
+            />
+            {data.length && <Tooltip />}]
+            <Legend
+              verticalAlign="top"
+              align="center"
+              wrapperStyle={{
+                height: "50px",
+                display: "flex",
+                alignItems: "flex-end",
+                left: "200px",
+                width: "500px",
+                top: "40px"
+              }}
+            />
             {Object.keys(data[0])
               .filter(item => item !== "year")
               .map(item => (
