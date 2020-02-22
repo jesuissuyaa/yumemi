@@ -52,6 +52,32 @@ yarn dev
 
 http://localhost:3000 でアプリが起動します
 
+## リポジトリにあるもの
+
+### Code
+
+ソースコードがあります
+
+このリポジトリでは、以下の方針でブランチを切っています
+
+- master: 公開用branch; 基本いじらない
+- develop: 開発の最新バージョン; 自分が作業するbranchはdevelopから切っていく
+- 作業ブランチ: 自分がつくる部分を管理するブランチ
+
+作業ブランチは、すでにdevelopにマージ済ですが、記録のためブランチは削除していません
+
+また、developの内容とmasterの内容は同じです
+
+### Issues
+
+主に開発のタスク管理で使用しました
+
+### Wiki
+
+Reactアプリの環境構築の記事がひとつおいてあります
+
+（別のプロジェクト用に自分が書いたもの）
+
 ## 使用技術
 
 - [React](https://reactjs.org/)
@@ -61,6 +87,7 @@ http://localhost:3000 でアプリが起動します
 
 ## 参考資料
 
-Atomic Design: Reactプロジェクトでcomponentを整理する考え方
-- https://dev.to/maciekchmura/how-i-structure-a-react-project-3c2i
+Reactプロジェクトの環境構築（過去に自分が書いたもの）: https://github.com/jesuissuyaa/yumemi/wiki/Setup
 
+Atomic Design: Reactプロジェクトでcomponentを整理する考え方
+- わかりやすい解説 https://dev.to/maciekchmura/how-i-structure-a-react-project-3c2i
