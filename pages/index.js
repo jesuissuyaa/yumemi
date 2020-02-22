@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
 import instance from "@/utils/instance";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend
+} from "recharts";
 
 const Index = () => {
   // 都道府県のデータ
@@ -12,6 +21,9 @@ const Index = () => {
   const years = [...Array(18)].map((_, i) => 1960 + i * 5);
   // 人口構成のデータ
   const [data, setData] = useState([]);
+  // データのdomain
+  const [dataMin, setDataMin] = useState(0);
+  const [dataMax, setDataMax] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -126,7 +138,35 @@ const Index = () => {
           ))}
         </div>
       </section>
+
+      <section className="chart-container">
+        {data.length !== 0 && (
+          <LineChart width={500} height={300} data={data} margin={50}>
+            <CartesianGrid />
+            <XAxis dataKey="year" />
+            <YAxis
+            //  label="人口"
+            />
+            {data.length && <Tooltip />}
+            {Object.keys(data[0])
+              .filter(item => item !== "year")
+              .map(item => (
+                <Line
+                  key={item}
+                  type="monotone"
+                  dataKey={item}
+                  stroke="#8884d8"
+                />
+              ))}
+          </LineChart>
+        )}
+      </section>
       <style jsx>{`
+        .chart-container {
+          display: flex;
+          justify-content: center;
+          margin-top: 5rem;
+        }
         .checkbox-container {
           display: flex;
           flex-flow: row wrap;
