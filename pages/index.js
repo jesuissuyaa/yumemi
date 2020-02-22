@@ -18,6 +18,7 @@ const Index = () => {
   }, []);
 
   // チェックボックスの状態が変わったときのハンドラー
+  // 人口データの取得とチェックされた都道府県リストの更新をする
   const handleChange = async event => {
     const value = event.target.value;
     // データがなければ追加
