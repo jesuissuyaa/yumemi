@@ -9,6 +9,7 @@ import {
   Tooltip,
   Legend
 } from "recharts";
+import CheckItem from "@/components/molecules/CheckItem";
 
 const Index = () => {
   // 都道府県のデータ
@@ -89,20 +90,14 @@ const Index = () => {
 
       <section>
         <h2>都道府県</h2>
-        <div className="checkbox-container">
+        <div className="CheckItem-container">
           {prefs.map(item => (
-            <div className="checkbox-wrapper" key={item.prefcode}>
-              <input
-                type="checkbox"
-                name={item.prefName}
-                value={item.prefCode}
-                onChange={handleChange}
-                key={`input-${item.prefcode}`}
-              />
-              <label htmlFor={item.prefName} key={`label-${item.prefcode}`}>
-                {item.prefName}
-              </label>
-            </div>
+            <CheckItem
+              key={item.prefCode}
+              label={item.prefName}
+              value={item.prefCode}
+              onChange={handleChange}
+            />
           ))}
         </div>
       </section>
@@ -172,13 +167,9 @@ const Index = () => {
           justify-content: center;
           margin-top: 5rem;
         }
-        .checkbox-container {
+        .CheckItem-container {
           display: flex;
           flex-flow: row wrap;
-        }
-        .checkbox-wrapper {
-          display: flex;
-          flex-basis: 20%;
         }
       `}</style>
     </>
